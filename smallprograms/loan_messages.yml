@@ -1,0 +1,12 @@
+# loan_messages.yml
+
+welcome: "Welcome to loan payment calculator. Enter you name: "
+invalid_name: "You must enter a valid name."
+loan_amount: "Please enter the total value of the loan in dollars: "
+invalid_loan_amount: "Please enter a valid dollar amount (ex. 5000): "
+loan_years: "What is the life of the loan in years?"
+invalid_years: "Please enter a valid number of years (ex. 5, 6, 7): "
+interest_rate: "Please enter the yearly interest rate (ex. 5 for 5%): "
+invalid_interest: "Please enter a valid interest rate (ex. 5 for 5%):"
+another_calculation: "Would you like to calculate another loan payment? (Y for another)"
+thank_you: "Thank you for using loan calculator. Goodbye!"
