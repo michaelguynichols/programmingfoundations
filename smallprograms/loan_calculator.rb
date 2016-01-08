@@ -36,13 +36,12 @@ end
 def calculate_loan_payment(dollars, rate, months)
   months = Float(months)
   one_plus_rate = 1.0 + rate
-  numerator = rate * (one_plus_rate ** months)
-  denominator = one_plus_rate ** months - 1.0
+  numerator = rate * (one_plus_rate**months)
+  denominator = one_plus_rate**months - 1.0
   result = numerator / denominator
   final_result = dollars.to_f * result
   Float(final_result).round(2)
 end
-
 
 prompt(MESSAGES['welcome'])
 
@@ -121,7 +120,6 @@ loop do # main loop
   answer = gets.chomp
 
   break unless answer.downcase.start_with?('y')
-
 end
 
 prompt(MESSAGES['thank_you'])
