@@ -2,8 +2,8 @@
 
 VALID_CHOICES = %w(r p s l S)
 WINNING_PAIRS = [%w(r s), %w(p r), %w(s p), %w(r l), %w(l S),
-  %w(s l), %w(l p), %w(p S), %w(S r)]
-CHOICES_INTO_WORDS = {"r" => "rock", "p" => "paper", "s" => "scissors", "l" => "lizard", "S" => "Spock"}
+                 %w(s l), %w(l p), %w(p S), %w(S r)]
+CHOICES_INTO_WORDS = { "r" => "rock", "p" => "paper", "s" => "scissors", "l" => "lizard", "S" => "Spock" }
 
 def prompt(message)
   Kernel.puts("=> #{message}")
@@ -39,7 +39,7 @@ def match_win?(player, computer)
   player == 5 || computer == 5
 end
 
-def who_won?(player, computer)
+def who_won?(player)
   if player == 5
     prompt("You have won the match!")
   else
@@ -57,7 +57,6 @@ player_score = 0
 computer_score = 0
 
 loop do
-
   choice = ''
   loop do
     prompt("Choose one: #{VALID_CHOICES.join(', ')}")
@@ -89,7 +88,7 @@ loop do
     answer = Kernel.gets().chomp()
     break unless answer.downcase().start_with?('y')
   else
-    who_won?(player_score, computer_score)
+    who_won?(player_score)
     prompt("Final score: Player: #{player_score}; Computer #{computer_score}")
     break
   end
