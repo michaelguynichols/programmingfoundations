@@ -6,6 +6,9 @@ VALUES = { 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7,
 ROYALS = { 11 => "J", 12 => "Q", 13 => "K", 14 => "A" }
 PLAYER = "You"
 COMPUTER = "Dealer"
+WIN_SCORE = 21
+DEALER_STOP_SCORE = 17
+ROUNDS = 5
 
 def prompt(message)
   puts "=> #{message}"
@@ -91,7 +94,7 @@ def score_cards(cards)
   score = 0
   cards.sort.each do |card|
     if card == 14
-      if score + VALUES[card] > 21
+      if score + VALUES[card] > WIN_SCORE
         score += 1
       else
         score += VALUES[card]
@@ -108,7 +111,7 @@ def display_score(player)
 end
 
 def busted?(cards)
-  score_cards(cards) > 21
+  score_cards(cards) > WIN_SCORE
 end
 
 def who_won(player, computer)
@@ -135,42 +138,67 @@ def final_result(player, computer)
 end
 
 def computer_plays(deck_of_cards, c_cards)
-  while score_cards(c_cards) < 17
+  while score_cards(c_cards) < DEALER_STOP_SCORE
     hit(deck_of_cards, c_cards)
   end
 end
 
-deck = build_deck
-player_cards = []
-computer_cards = []
-initial_deal(deck, player_cards, computer_cards)
-
-loop do
-  display_cards(player_cards, computer_cards)
-
-  loop do
-    prompt "Would you like to hit (h) or stay (s)?"
-    answer = ''
-    loop do
-      answer = gets.chomp
-      break if answer.downcase.start_with?('h') || answer.downcase.start_with?('s')
-      prompt "Please enter a valid choice: 'h' or 's'"
-    end
-
-    if answer == 'h'
-      hit(deck, player_cards)
-      display_cards(player_cards, computer_cards)
-      break if busted?(player_cards)
-    else
-      break
-    end
-  end
-
-  break if busted?(player_cards)
-
-  computer_plays(deck, computer_cards)
-
-  break if busted?(computer_cards) || who_won(player_cards, computer_cards)
+def display_rounds_score(p_score, c_score)
+  prompt "#{PLAYER}r score: #{p_score}"
+  prompt "#{COMPUTER} score: #{c_score}"
 end
 
-final_result(player_cards, computer_cards)
+player_score = 0
+computer_score = 0
+loop do
+  deck = build_deck
+  player_cards = []
+  computer_cards = []
+  initial_deal(deck, player_cards, computer_cards)
+
+  loop do
+    display_cards(player_cards, computer_cards)
+
+    loop do
+      prompt "Would you like to hit (h) or stay (s)?"
+      answer = ''
+      loop do
+        answer = gets.chomp
+        break if answer.downcase.start_with?('h') || answer.downcase.start_with?('s')
+        prompt "Please enter a valid choice: 'h' or 's'"
+      end
+
+      if answer == 'h'
+        hit(deck, player_cards)
+        display_cards(player_cards, computer_cards)
+        break if busted?(player_cards)
+      else
+        break
+      end
+    end
+
+    break if busted?(player_cards)
+
+    computer_plays(deck, computer_cards)
+
+    break if busted?(computer_cards) || who_won(player_cards, computer_cards)
+  end
+
+  final_result(player_cards, computer_cards)
+
+  if who_won(player_cards, computer_cards) == PLAYER || busted?(computer_cards)
+    player_score += 1
+  elsif who_won(player_cards, computer_cards) == COMPUTER || busted?(player_cards)
+    computer_score += 1
+  end
+  display_rounds_score(player_score, computer_score)
+
+  break if player_score == ROUNDS || computer_score == ROUNDS
+
+  prompt "The first one to #{ROUNDS} wins."
+  prompt "Would you like to play again? (y or n)"
+  play_again = gets.chomp
+  break if play_again.downcase != 'y'
+end
+
+prompt "Thank you for playing 21! Goodbye."
